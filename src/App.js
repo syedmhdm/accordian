@@ -25,20 +25,46 @@ export default function App() {
 }
 
 function Accordion({ data }) {
+  const [curOpen, setCurOpen] = useState(null);
+
   return (
     <div className='accordion'>
       {data.map((el, i) => (
-        <AccordionItem title={el.title} text={el.text} num={i} key={el.title} />
+        <AccordionItem
+          curOpen={curOpen}
+          onOpen={setCurOpen}
+          title={el.title}
+          num={i}
+          key={el.title}
+        >
+          {" "}
+          {el.text}
+        </AccordionItem>
       ))}
+      <AccordionItem
+        curOpen={curOpen}
+        onOpen={setCurOpen}
+        title={"Test 1"}
+        num={22}
+        key={"test 1"}
+      >
+        <p>The greatest glory in living lies not in never falling</p>
+        <ul>
+          but in rising every time we fall. - Nelson Mandela. The way to get
+          started is to quit talking and begin doing. - Walt Disney. Your time
+          is limited, so don't waste it living someone else's life. "
+        </ul>
+      </AccordionItem>
     </div>
   );
 }
 
-function AccordionItem({ num, title, text }) {
-  const [isOpen, setIsOpen] = useState(false);
+function AccordionItem({ num, title, curOpen, onOpen, children }) {
+  const isOpen = num === curOpen;
 
   function handleToggle() {
-    setIsOpen((isOpen) => !isOpen);
+    // setIsOpen((isOpen) => !isOpen);
+    onOpen(isOpen ? null : num);
   }
 
   return (
@@ -46,7 +72,7 @@ function AccordionItem({ num, title, text }) {
       <p className='number'>{num < 9 ? `0${num + 1}` : num + 1}</p>
       <p className='text'>{title}</p>
       <p className='icon'>{isOpen ? "-" : "+"}</p>
-      {isOpen && <div className='content-box'>{text}</div>}
+      {isOpen && <div className='content-box'>{children}</div>}
     </div>
   );
 }
